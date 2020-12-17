@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json()) 
 app.use(cors())
 app.use(express.static('build'))
-const mongoose = require('mongoose')
+
 
 
 
@@ -53,25 +53,33 @@ app.get('/', (req, res) => {
 })
       
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then((item) => {
+    res.json(item)
   })
+})
 
 app.get('/info', (req,res) =>{
-  const date = Date();
-  const people =`${persons.length}`;
-  res.send( `Phonebook has info for ${people} people! <br> ${date}` )}) 
+  Person.countDocuments({}).then((count) => {
+    const infoContent = `Phonebook has info for ${count} people<br>${Date()}`
+    res.send(infoContent)
+  })
+})
  
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res),next => {
   const id = Number(req.params.id)
   const person= persons.find(person => person.id === id)
         if (person) {res.json(person)  } 
-        else { res.status(404).end()  }})
+        else 
+        { res.status(404).end()  }})
+        .catch((error) => next(error))
 
-app.delete('/api/persons/:id', (req, res) => {
+
+app.delete('/api/persons/:id', (req, res, next) => {
         const id = Number(req.params.id)
         persons = persons.filter(person => person.id !== id)
         res.status(204).end()
+        .catch((error) => next(error))
           })
 
 app.put('/api/persons/:id', (req, res, next) => {
