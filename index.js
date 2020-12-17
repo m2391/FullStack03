@@ -11,7 +11,7 @@ const mongoose = require('mongoose')
 
 
 
-morgan.token('body', (req) =>{
+morgan.token('person', (req) =>{
   if (req.method === 'POST') {
     return JSON.stringify(req.body)
   }else {
@@ -24,7 +24,7 @@ app.use(
 )
 
 
-let persons = [ 
+/*let persons = [ 
     {    
     id: 1,    
     name: "Arto Hellas",  
@@ -46,7 +46,7 @@ let persons = [
      id: 4,
      name:"Mary Poppendick",
      number:"39-236423122"   
-    }]
+    }]*/
     
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
