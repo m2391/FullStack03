@@ -66,14 +66,19 @@ app.get('/info', (req,res) =>{
 })
  
 
-app.get('/api/persons/:id', (req, res),next => {
-  const id = Number(req.params.id)
-  const person= persons.find(person => person.id === id)
-        if (person) {res.json(person)  } 
-        else 
-        { res.status(404).end()  }})
-        .catch((error) => next(error))
+app.get('/api/persons/:id', (req, res, next) => {
+  const id = req.params.id
 
+  Person.findById(id)
+    .then((person) => {
+      if (person) {
+        res.json(person)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch((error) => next(error))
+  })
 
 app.delete('/api/persons/:id', (req, res, next) => {
         const id = Number(req.params.id)
